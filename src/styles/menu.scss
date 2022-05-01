@@ -1,0 +1,23 @@
+@import 'bootstrap';
+
+.menu {
+    width: 30%;
+    margin: 20px;
+    margin-left: 0px;
+    margin-top: 0px;
+}
+
+.btn {
+    height: 100px;
+    background-color: #e64747 !important;
+    border-radius: 20px !important;
+    border: none !important;
+    font-size: 30px !important;
+
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.btn:hover, .btn:active, .btn:visited {
+    filter: brightness(1.3);
+}

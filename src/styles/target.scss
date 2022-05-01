@@ -1,0 +1,16 @@
+.empty {
+    width: 5.5vw;
+    aspect-ratio: 0.714;
+
+    border-radius: 13%;
+
+    background-color: green;
+    border: solid black;
+
+    display: flex;
+    align-items: center;
+}
+
+.foundCard {
+    margin: 0px auto !important;
+}
