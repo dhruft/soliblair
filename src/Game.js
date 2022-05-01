@@ -10,7 +10,7 @@ import { useReducer } from 'react';
 
 const Game = () => {
 
-    const [cards, updateCards] = useState([[{flower:"spade",number:6,col:0}],[],[],[],[],[],[]]);
+    const [cards, updateCards] = useState([[{flower:"spade",number:6,col:0}],[{flower:"spade",number:4,col:1},{flower:"spade",number:3,col:1},{flower:"spade",number:2,col:1}],[{flower:"spade",number:12,col:2},{flower:"heart",number:13,col:2},{flower:"spade",number:1,col:2}],[],[],[],[]]);
     const [foundation, updateFound] = useState([[],[],[],[]]);
     const [gameStatus, updateGame] = useState(false);
     const [stock, updateStock] = useState([[{flower:"heart",number:5,col:20}],[]])
@@ -58,8 +58,8 @@ const Game = () => {
         
         const finalFound = foundation[["heart","diamond","clover","spade"].indexOf(card.flower)]
         let newCards = cards; 
-        let oldCards = card.col>15 ? [stock[1][0]] : (card.col>6 ? [finalFound[finalFound.length-1]] : cards[card.col]);
-        let currentCards = cards[colNum];      
+        let oldCards = card.col>15 ? [stock[1][0]] : (card.col>6 ? [finalFound[finalFound.length-1]] : newCards[card.col]);
+        let currentCards = newCards[colNum]; 
         
         if (colNum !== card.col) {
             let oldIndex = 0;
