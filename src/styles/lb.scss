@@ -1,0 +1,25 @@
+.table {
+    width: calc(100vw - 6vh) !important;
+    margin: 3vh;
+}
+
+tr:nth-child(odd) {
+    background-color: white;
+}
+
+// tr:nth-child(even) {
+//     background-color: #e64747;
+//     color: white;
+//     &:hover {
+//         color: white !important;
+//     }
+// }
+
+th {
+    background-color: white !important;
+    border: solid black 1px !important;
+}
+
+tr {
+    margin-top: 5vh !important;
+}

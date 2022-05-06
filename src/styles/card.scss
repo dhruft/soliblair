@@ -1,16 +1,33 @@
 .cardBody {
     width: 5.5vw;
-    aspect-ratio: 0.714;
 
     border-radius: 13%;
 
     background-color: white;
 
-    margin-top: -5.5vw;
+    margin-bottom: -5.5vw;
     border: solid black;
 }
 
+.c0 {
+    margin-top: 2vw;
+}
+
 .hidden {
-    background-color: black;
-    border: solid white;
+    border: solid white 0.2vw;
+}
+
+//removing cards out of stock
+.animate {
+    margin-top: 3vh;
+}
+
+//deck dealing animation (first and following cards)
+.animateDeck {
+    margin-top: 3vh;
+}
+
+.secondary {
+    //margin-top: -7.7031vw;
+    margin-top: 0 !important;
 }

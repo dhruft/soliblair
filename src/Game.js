@@ -1,22 +1,36 @@
 import CardColumn from './components/CardColumn'
 import Target from './components/Target'
 import Stock from './components/Stock'
+import GameOver from './components/GameOver';
+import Card from './components/Card'
 
 import './styles/game.scss';
 import Menu from './Menu';
 
-import { useState } from 'react';
-import { useReducer } from 'react';
+import { useState, useReducer } from 'react';
+import { motion } from "framer-motion";
 
-const Game = () => {
+const Game = ({ leaderboard, insert, checkInsert }) => {
 
-    const [cards, updateCards] = useState([[{flower:"spade",number:6,col:0}],[{flower:"spade",number:4,col:1},{flower:"spade",number:3,col:1},{flower:"spade",number:2,col:1}],[{flower:"spade",number:12,col:2},{flower:"heart",number:13,col:2},{flower:"spade",number:1,col:2}],[],[],[],[]]);
+    const [cards, updateCards] = useState([[],[],[],[],[],[],[]]);
     const [foundation, updateFound] = useState([[],[],[],[]]);
     const [gameStatus, updateGame] = useState(false);
-    const [stock, updateStock] = useState([[{flower:"heart",number:5,col:20}],[]])
+    const [stock, updateStock] = useState([[{ flower:"lol", number:69 }],[]])
+    const [paused, changePause] = useState(false);
+    const [running, setRunning] = useState(false);
+    const [time, setTime] = useState(0);
+    const [hiddenCount, updateHidden] = useState(100)
+    const [won, setWon] = useState(false);
+    const [score, updateScore] = useState(0);
+    const [isTop, changeTop] = useState(false);
+    const [animate, setAnimate] = useState(false);
     const [, forceUpdate] = useReducer(x => x + 1, 0);
 
+    const handleClose = () => setWon(false);
+    const handleShow = () => setWon(true);
+
     const stockClick = () => {
+        if (!gameStatus) return;
         if (stock[0].length===0) {
             let newStock = stock;
             newStock[0] = newStock[1];
@@ -28,38 +42,62 @@ const Game = () => {
             newStock[0] = newStock[0].slice(0,newStock[0].length-1);
             updateStock(newStock)
         }
+
+        console.log(hiddenCount)
+
         forceUpdate();
     }
 
-    const foundDropped = (card, target) => {
+    const foundDropped = (card, target, numMoves) => {
         
         let newCards = cards;
-        const oldCol = newCards[card.col];
-        newCards[card.col] = oldCol.slice(0,oldCol.length-1)
+        let newHidden = hiddenCount;
+
+        if (card.col !== 20) {
+            //update old column cards
+            const oldCol = newCards[card.col];
+            newCards[card.col] = oldCol.slice(0,oldCol.length-1)
+            if (newCards[card.col].length>0 && newCards[card.col][newCards[card.col].length-1].hidden===true) {
+                newHidden--;
+                newCards[card.col][newCards[card.col].length-1].hidden = false
+            }
+        }
         updateCards(newCards)
 
-        const newObj = calculateObject(card.col, newCards)
-        let newAccepts = accepts;
-        newAccepts[card.col] = newObj;
-        updateAccept(newAccepts);
+        if (card.col === 20) {
+            //update stock
+            let newStock = stock;
+            newStock[1] = newStock[1].slice(1)
+            updateStock(newStock);
+        } else {
+            //update accepts for columns
+            const newObj = calculateObject(card.col, newCards)
+            let newAccepts = accepts;
+            newAccepts[card.col] = newObj;
+            updateAccept(newAccepts);
+        }
 
         card.col = 7+["heart","diamond","clover","spade"].indexOf(card.flower);
         let tempFound = foundation;
-        console.log(card)
         tempFound[target].push(card);
+
         updateFound(tempFound)
 
+        updateHidden(newHidden);
+
         forceUpdate();
+
+        if (newHidden === 0) endGame();
     }
 
     const dropped = (card, colNum) => {
 
-        console.log(card)
-        
         const finalFound = foundation[["heart","diamond","clover","spade"].indexOf(card.flower)]
         let newCards = cards; 
         let oldCards = card.col>15 ? [stock[1][0]] : (card.col>6 ? [finalFound[finalFound.length-1]] : newCards[card.col]);
-        let currentCards = newCards[colNum]; 
+        let currentCards = newCards[colNum];
+        let newHidden = hiddenCount;
+        let newScore = score;
         
         if (colNum !== card.col) {
             let oldIndex = 0;
@@ -71,6 +109,7 @@ const Game = () => {
             currentCards = currentCards.concat(
                 oldCards.slice(oldIndex).map((oldCard => {
                 oldCard.col = colNum;
+                oldCard.hidden = false;
                 return oldCard;
             })));
             newCards[colNum] = currentCards;
@@ -79,16 +118,18 @@ const Game = () => {
             const newObj1 = calculateObject(colNum, newCards)
             let newObj2 = "";
             if (card.col>6 && card.col<15) {
+                newScore -= 15;
                 let newFoundation = foundation;
                 newFoundation[card.col-7] = newFoundation[card.col-7].slice(0,newFoundation[card.col-7].length-1);
                 updateFound(newFoundation)
             } else if (card.col>15) {
+                newScore += 5;
                 let newStock = stock;
                 newStock[1] = newStock[1].slice(1)
                 updateStock(newStock);
             } else {
-                console.log(newCards)
-                if (newCards[card.col].length>0) {
+                if (newCards[card.col].length>0 && newCards[card.col][newCards[card.col].length-1].hidden===true) {
+                    newHidden--;
                     newCards[card.col][newCards[card.col].length-1].hidden = false
                 }
                 newObj2 = calculateObject(card.col, newCards)
@@ -100,12 +141,17 @@ const Game = () => {
             if (card.col<7) newAccepts[card.col] = newObj2;
 
             //final stuff
-
             updateAccept(newAccepts);
 
             updateCards(newCards);
 
+            updateHidden(newHidden)
+
+            updateScore(newScore);
+
             forceUpdate();
+
+            if (newHidden === 0) endGame();
         }
     }
 
@@ -173,42 +219,96 @@ const Game = () => {
             return card;
         }),[]]
 
+        let newAccepts = [0,1,2,3,4,5,6].map((column) => calculateObject(column, startUpCards))
+
         updateStock(newStock)
         updateCards(startUpCards);
         updateFound([[],[],[],[]])
         updateGame(true);
+        updateAccept(newAccepts);
+        setRunning(true)
+        updateHidden(21)
+        updateScore(625)
 
         forceUpdate();
+    }
+
+    const dealCards = () => {
+        setWon(false)
+        changePause(false)
+        updateStock([[{ flower:"lol", number:69 }],[]])
+        updateFound([[],[],[],[]])
+        updateCards([[],[],[],[],[],[],[]]);
+        setRunning(false);
+        setTime(0)
+        changeTop(false)
+        setAnimate(true)
+        setTimeout(() => startGame(), 1500)
+    }
+
+    const pauseGame = () => {
+        if (gameStatus && stock[0].length !== 0) {
+            if (stock[0][0].flower !== "lol") {
+                changePause(!paused);
+                setRunning(!running);
+            }
+        }
+    }
+
+    const endGame = () => {
+        setRunning(false)
+        changePause(true)
+        setWon(true)
+
+        checkInsert(score).then(isItTop => {
+            changeTop(isItTop);
+        }).then(handleShow())
+    }
+
+    const animateEnd = () => {
+        setTimeout(()=>setAnimate(false),100)
     }
 
     return (
         <div className="wrapper">
             <div className="gameContainer shadow-lg">
                 <div className="column stock">
-                    <Stock stock={stock} stockClick={stockClick}/>
+                    <Stock stock={stock} stockClick={stockClick} running={running}/>
+                    {animate && (
+                        [0,1,2,3,4,5,6].map((num) =>
+                        <motion.div
+                            key={animate+num}
+                            initial={{ x: 0, opacity: 1 }}
+                            animate={{ x:`${9+7.3*num}vw`, opacity: 1 }}
+                            exit={{ x: 0, opacity: 0 }}
+                            transition={{default: { duration: 1.5 }}}
+                            onAnimationComplete={animateEnd}>       
+                                <Card flower={"lol"} number={69} col={20} hidden={true} animator={num===0 ? " animateDeck" : " secondary"}/>
+                        </motion.div>)
+                    )}
                 </div> 
                 <div></div>
-                <CardColumn cards={cards} colNum={0} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock}/>
-                <CardColumn cards={cards} colNum={1} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock}/>
-                <CardColumn cards={cards} colNum={2} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock}/>
-                <CardColumn cards={cards} colNum={3} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock}/>
-                <CardColumn cards={cards} colNum={4} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock}/>
-                <CardColumn cards={cards} colNum={5} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock}/>
-                <CardColumn cards={cards} colNum={6} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock}/>
+                <CardColumn cards={cards} colNum={0} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock} paused={paused} gameStatus={gameStatus}/>
+                <CardColumn cards={cards} colNum={1} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock} paused={paused} gameStatus={gameStatus}/>
+                <CardColumn cards={cards} colNum={2} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock} paused={paused} gameStatus={gameStatus}/>
+                <CardColumn cards={cards} colNum={3} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock} paused={paused} gameStatus={gameStatus}/>
+                <CardColumn cards={cards} colNum={4} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock} paused={paused} gameStatus={gameStatus}/>
+                <CardColumn cards={cards} colNum={5} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock} paused={paused} gameStatus={gameStatus}/>
+                <CardColumn cards={cards} colNum={6} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock} paused={paused} gameStatus={gameStatus}/>
+                <div></div>
                 <div className="column foundation">
-                    <Target foundation={foundation} num={0} foundDropped={foundDropped}/>
-                    <Target foundation={foundation} num={1} foundDropped={foundDropped}/>
-                    <Target foundation={foundation} num={2} foundDropped={foundDropped}/>
-                    <Target foundation={foundation} num={3} foundDropped={foundDropped}/>
-                </div> 
+                    <Target foundation={foundation} num={0} foundDropped={foundDropped} stock={stock}/>
+                    <Target foundation={foundation} num={1} foundDropped={foundDropped} stock={stock}/>
+                    <Target foundation={foundation} num={2} foundDropped={foundDropped} stock={stock}/>
+                    <Target foundation={foundation} num={3} foundDropped={foundDropped} stock={stock}/>
+                </div>
             </div>
-            <Menu gameStatus={gameStatus} startGame={startGame}/>
+            <Menu gameStatus={gameStatus} dealCards={dealCards} pauseGame={pauseGame} paused={paused} updateCards={updateCards} running={running} 
+            time={time} setTime={setTime} updateScore={updateScore} score={score}/>
+            <GameOver won={won} handleClose={handleClose} time={time} score={score} leaderboard={leaderboard} insert={insert} isTop={isTop}/>
         </div>
     )
 
-    /*
- 
-*/
 }
 
 export default Game

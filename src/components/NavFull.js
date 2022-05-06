@@ -8,8 +8,8 @@ const NavFull = () => {
         <Navbar.Brand href="/">Soli-Blair</Navbar.Brand>
         <Nav>
           <Nav.Link href="/">Play</Nav.Link>
-          <Nav.Link href="/signup">Leaderboard</Nav.Link>
-          <Nav.Link href="/signup">Info</Nav.Link>
+          <Nav.Link href="/leaderboard">Leaderboard</Nav.Link>
+          <Nav.Link href="/info">Info</Nav.Link>
         </Nav>
       </Container>
     </Navbar>

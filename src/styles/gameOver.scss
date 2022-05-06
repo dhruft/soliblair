@@ -1,0 +1,22 @@
+@import "_button";
+
+.modalSubmit {
+    background-color: #e64747 !important;
+    border: none !important;
+
+    @include animateButton;
+}
+
+.statsBody {
+    height: 10vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.formHeader {
+    display: flex;
+    justify-content: center;
+}
