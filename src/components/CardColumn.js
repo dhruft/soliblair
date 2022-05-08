@@ -30,11 +30,15 @@ const CardColumn = ({ cards, colNum, dropped, accepts, foundation, stock, paused
     }), [dropped, colNum, accepts, foundation, stock]);
   
     return (
-      <div ref={dragRef} className="column">
-        {Array.from(Array(currentCards.length).keys()).map((card) => (
-          <Card gameStatus={gameStatus} paused={paused} isFirst={"c" + card.toString()} flower={currentCards[card].flower} hidden={currentCards[card].hidden} 
-          number={currentCards[card].number} col={currentCards[card].col} key={currentCards[card].flower.charAt(0) + currentCards[card].number.toString()}/>
-        ))}
+      <div ref={dragRef} className="rowStack">
+          {Array.from(Array(currentCards.length).keys()).map((card) => (
+            <div>
+
+              <Card gameStatus={gameStatus} paused={paused} isFirst={"c" + card.toString()} flower={currentCards[card].flower} hidden={currentCards[card].hidden} 
+              number={currentCards[card].number} col={currentCards[card].col} key={currentCards[card].flower.charAt(0) + currentCards[card].number.toString()}/>
+
+            </div>
+          ))}
       </div>
     );
   };

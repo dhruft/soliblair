@@ -3,6 +3,7 @@ import Target from './components/Target'
 import Stock from './components/Stock'
 import GameOver from './components/GameOver';
 import Card from './components/Card'
+import Warning from './components/Warning'
 
 import './styles/game.scss';
 import Menu from './Menu';
@@ -24,10 +25,14 @@ const Game = ({ leaderboard, insert, checkInsert }) => {
     const [score, updateScore] = useState(0);
     const [isTop, changeTop] = useState(false);
     const [animate, setAnimate] = useState(false);
+    const [warning, updateWarning] = useState(false);
     const [, forceUpdate] = useReducer(x => x + 1, 0);
 
     const handleClose = () => setWon(false);
     const handleShow = () => setWon(true);
+
+    const noWarning = () => updateWarning(false);
+    const handleWarning = () => updateWarning(true);
 
     const stockClick = () => {
         if (!gameStatus) return;
@@ -266,7 +271,7 @@ const Game = ({ leaderboard, insert, checkInsert }) => {
     }
 
     const animateEnd = () => {
-        setTimeout(()=>setAnimate(false),100)
+        setTimeout(()=>setAnimate(false),1000)
     }
 
     return (
@@ -274,18 +279,20 @@ const Game = ({ leaderboard, insert, checkInsert }) => {
             <div className="gameContainer shadow-lg">
                 <div className="column stock">
                     <Stock stock={stock} stockClick={stockClick} running={running}/>
-                    {animate && (
-                        [0,1,2,3,4,5,6].map((num) =>
-                        <motion.div
-                            key={animate+num}
-                            initial={{ x: 0, opacity: 1 }}
-                            animate={{ x:`${9+7.3*num}vw`, opacity: 1 }}
-                            exit={{ x: 0, opacity: 0 }}
-                            transition={{default: { duration: 1.5 }}}
-                            onAnimationComplete={animateEnd}>       
-                                <Card flower={"lol"} number={69} col={20} hidden={true} animator={num===0 ? " animateDeck" : " secondary"}/>
-                        </motion.div>)
-                    )}
+                    <div className="animateRow">
+                        {animate && (
+                            [0,1,2,3,4,5,6].map((num) =>
+                            <motion.div
+                                key={animate+num}
+                                initial={{ x: `${-5.6*num-5.7}vw`, opacity: 1 }}
+                                animate={{ x:`${3.4+1.668*num}vw`, opacity: 1 }}
+                                exit={{ x: 0, opacity: 0 }}
+                                transition={{default: { duration: 1.5 }}}
+                                onAnimationComplete={animateEnd}>       
+                                    <Card flower={"lol"} number={69} col={20} hidden={true}/>
+                            </motion.div>)
+                        )}
+                    </div>
                 </div> 
                 <div></div>
                 <CardColumn cards={cards} colNum={0} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock} paused={paused} gameStatus={gameStatus}/>
@@ -306,6 +313,7 @@ const Game = ({ leaderboard, insert, checkInsert }) => {
             <Menu gameStatus={gameStatus} dealCards={dealCards} pauseGame={pauseGame} paused={paused} updateCards={updateCards} running={running} 
             time={time} setTime={setTime} updateScore={updateScore} score={score}/>
             <GameOver won={won} handleClose={handleClose} time={time} score={score} leaderboard={leaderboard} insert={insert} isTop={isTop}/>
+            <Warning warning={warning} handleClose={handleClose} />
         </div>
     )
 
