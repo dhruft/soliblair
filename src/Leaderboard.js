@@ -1,5 +1,5 @@
 import { Table } from 'react-bootstrap'
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import './styles/lb.scss'
 
 const Leaderboard = ({ updateLeaderboard }) => {
@@ -10,8 +10,7 @@ const Leaderboard = ({ updateLeaderboard }) => {
     useEffect(() => {
 
         const fetchData = async () => {
-            const data = updateLeaderboard();
-            changeRLB(data);
+            updateLeaderboard().then((data) => changeRLB(data)).then(()=>console.log('data fetched'));
         }
 
         fetchData().catch(console.error).then(updateLoading(false));

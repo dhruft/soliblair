@@ -5,13 +5,13 @@
     background-color: #50c878; //or this #58cc6d
     border-radius: 3vw;
     height: 81vh;
-    width: 95%;
+    width: 95vw;
 
     border: inset red 1vw;
 
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    gap: 1.7vw;
 
     padding-left: 2vw;
     padding-right: 2vw;
@@ -37,7 +37,7 @@
 
     display: flex;
     flex-direction: row;
-    align-content: center;
+    justify-content: space-between;
 
     width: 5.5vw;
 }
@@ -45,5 +45,5 @@
 .animateRow {
     display: flex;
     flex-direction: row;
-    align-content: center;
+    justify-content: space-between;
 }

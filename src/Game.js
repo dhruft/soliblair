@@ -282,10 +282,11 @@ const Game = ({ leaderboard, insert, checkInsert }) => {
                     <div className="animateRow">
                         {animate && (
                             [0,1,2,3,4,5,6].map((num) =>
+                            //3.4+1.668*num
                             <motion.div
                                 key={animate+num}
                                 initial={{ x: `${-5.6*num-5.7}vw`, opacity: 1 }}
-                                animate={{ x:`${3.4+1.668*num}vw`, opacity: 1 }}
+                                animate={{ x:`${1.6*2+1.6*num}vw`, opacity: 1 }}
                                 exit={{ x: 0, opacity: 0 }}
                                 transition={{default: { duration: 1.5 }}}
                                 onAnimationComplete={animateEnd}>       
@@ -313,7 +314,7 @@ const Game = ({ leaderboard, insert, checkInsert }) => {
             <Menu gameStatus={gameStatus} dealCards={dealCards} pauseGame={pauseGame} paused={paused} updateCards={updateCards} running={running} 
             time={time} setTime={setTime} updateScore={updateScore} score={score}/>
             <GameOver won={won} handleClose={handleClose} time={time} score={score} leaderboard={leaderboard} insert={insert} isTop={isTop}/>
-            <Warning warning={warning} handleClose={handleClose} />
+            <Warning warning={warning} handleClose={noWarning} />
         </div>
     )
 
