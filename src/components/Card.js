@@ -1,11 +1,8 @@
 import '../styles/card.scss';
 import { useDrag } from 'react-dnd';
 
-import h1 from '../images/h1.png';
-import closed from '../images/closed.png';
-
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import Draggable from './CustomDragLayer'
 
@@ -23,12 +20,15 @@ const Card = ({ flower, number, hidden, col, foundCard, draggable, isFirst, paus
     useEffect(() => {
       dragPreview(getEmptyImage())
     }, []);
+
+    const image = <img ref={drag} src={require("../cardPics/"+(hidden?"closed":(flower.charAt(0)+number))+".png")} alt={(hidden?"closed":(flower.charAt(0)+number))} 
+    className={"cardBody "+foundCard+" "+animator+" "+(hidden?"hidden ":"notHidden ")+isFirst} 
+    style={{ visibility: isDragging ? 'hidden' : 'inherit'}}/>
   
     return (
       <>
-        <img ref={drag} src={hidden?closed:h1} alt="h1" className={"cardBody "+foundCard+" "+animator+" "+(hidden?"hidden ":"notHidden ")+isFirst} 
-        style={{ visibility: isDragging ? 'hidden' : 'inherit'}}/>
-        <Draggable imgName={h1}/>
+        {image}
+        <Draggable ref={drag} flower={flower} hidden={hidden} number={number} key={flower}/>
       </>
     );
   };

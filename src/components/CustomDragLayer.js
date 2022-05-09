@@ -1,9 +1,8 @@
+import { useEffect, useState } from 'react';
 import { useDragLayer } from 'react-dnd'
-
-import h1 from '../images/h1.png'
 import '../styles/card.scss'
 
-const CustomDragLayer = ({ imgName }) => {  
+const CustomDragLayer = ({ flower, hidden, number }) => {
     
     const {isDragging, currentOffset, item} = useDragLayer(
             (monitor) => {
@@ -29,7 +28,8 @@ const CustomDragLayer = ({ imgName }) => {
               alignItems: 'center',
               justifyContent: 'center',
           }}>
-              <img className="cardBody" src={h1} alt={"h1"}/>
+              <img className={"cardBody"} update={{hidden, flower, number}} src={require("../cardPics/"+(hidden?"closed":(flower.charAt(0)+number))+".png")} 
+              alt={(hidden?"closed":(flower.charAt(0)+number))} key={item.id}/> {item.id}
           </div> 
         : null;
 };

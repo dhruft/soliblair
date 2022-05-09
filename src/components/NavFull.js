@@ -5,11 +5,11 @@ const NavFull = () => {
   return (
     <Navbar variant="dark" className="navbar">
       <Container>
-        <Navbar.Brand href="/">Soli-Blair</Navbar.Brand>
+        <Navbar.Brand href="/soliblair">Soli-Blair</Navbar.Brand>
         <Nav>
-          <Nav.Link href="/">Play</Nav.Link>
-          <Nav.Link href="/leaderboard">Leaderboard</Nav.Link>
-          <Nav.Link href="/info">Info</Nav.Link>
+          <Nav.Link href="/soliblair">Play</Nav.Link>
+          <Nav.Link href="/soliblair/leaderboard">Leaderboard</Nav.Link>
+          <Nav.Link href="/soliblair/info">Info</Nav.Link>
         </Nav>
       </Container>
     </Navbar>

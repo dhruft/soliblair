@@ -3,7 +3,7 @@ import Game from './Game'
 import Leaderboard from './Leaderboard'
 import Info from './Info'
 
-import { Routes, Route, BrowserRouter as Router, } from "react-router-dom";
+import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 
 import db from './firebase.js';
 import { collection, addDoc, getDocs } from "firebase/firestore";
@@ -58,13 +58,11 @@ function App() {
   return (
     <div className="App">
       <Nav />
-      <Router>
-        <Routes>
-            <Route path="/" element={<Game leaderboard={leaderboard} insert={insert} checkInsert={checkInsert}/>} />
-            <Route path="/leaderboard" element={<Leaderboard updateLeaderboard={updateLeaderboard} leaderboard={leaderboard}/>} />
-            <Route path="/info" element={<Info />}/>
-        </Routes>
-      </Router>
+      <Routes>
+        <Route path="/leaderboard" element={<Leaderboard updateLeaderboard={updateLeaderboard} leaderboard={leaderboard}/>} />
+        <Route path="/info" element={<Info />}/>
+        <Route exact path="/" element={<Game leaderboard={leaderboard} insert={insert} checkInsert={checkInsert}/>} />
+      </Routes>
     </div>
   );
 }
