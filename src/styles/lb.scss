@@ -1,8 +1,3 @@
-.table {
-    width: calc(100vw - 6vh) !important;
-    margin: 3vh;
-}
-
 tr:nth-child(odd) {
     background-color: white;
 }
@@ -22,4 +17,14 @@ th {
 
 tr {
     margin-top: 5vh !important;
+}
+
+.lbcontainer {
+    margin-left: 1.5vw;
+    margin-right: 1.5vw;
+    margin-top: 3vh;
+
+    display: flex;
+    flex-direction: row;
+    gap: 2vw;
 }

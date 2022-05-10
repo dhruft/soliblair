@@ -1,15 +1,49 @@
 .empty {
     width: 5.5vw;
-    aspect-ratio: 0.714;
-
+    height: 7.7vw;
     border-radius: 13%;
-
-    background-color: green;
 
     display: flex;
     align-items: center;
+
+    //outline: outset red 0.2vw;
+    box-shadow: 0 0 0.5vw 0.1vw black;
 }
 
 .foundCard {
     margin: 0 auto !important;
+    border: none !important;
+}
+
+.target {
+    width: 5.5vw;
+}
+
+.h {
+    background-image: url("../cardPics/hF.png");
+    background-size: 5.5vw;
+}
+
+.d {
+    background-image: url("../cardPics/dF.png");
+    background-size: 5.5vw;
+}
+
+.s {
+    background-image: url("../cardPics/sF.png");
+    background-size: 5.5vw;
+}
+
+.c {
+    background-image: url("../cardPics/cF.png");
+    background-size: 5.5vw;
+}
+
+.F {
+    background-image: url("../cardPics/F.png");
+    background-size: 5.5vw;
+}
+
+.show {
+    box-shadow: 0 0 0.5vw 0.1vw goldenrod !important;
 }

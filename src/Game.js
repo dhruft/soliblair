@@ -3,7 +3,6 @@ import Target from './components/Target'
 import Stock from './components/Stock'
 import GameOver from './components/GameOver';
 import Card from './components/Card'
-import Warning from './components/Warning'
 
 import './styles/game.scss';
 import Menu from './Menu';
@@ -11,7 +10,7 @@ import Menu from './Menu';
 import { useState, useReducer } from 'react';
 import { motion } from "framer-motion";
 
-const Game = ({ leaderboard, insert, checkInsert }) => {
+const Game = ({ insert, insertDaily, checkInsert }) => {
 
     const [cards, updateCards] = useState([[],[],[],[],[],[],[]]);
     const [foundation, updateFound] = useState([[],[],[],[]]);
@@ -25,14 +24,20 @@ const Game = ({ leaderboard, insert, checkInsert }) => {
     const [score, updateScore] = useState(0);
     const [isTop, changeTop] = useState(false);
     const [animate, setAnimate] = useState(false);
-    const [warning, updateWarning] = useState(false);
     const [, forceUpdate] = useReducer(x => x + 1, 0);
 
-    const handleClose = () => setWon(false);
+    const handleClose = () => {
+        setWon(false)
+        updateCards([[],[],[],[],[],[],[]])
+        updateGame(false);
+        setRunning(false)
+        changePause(false)
+        setTime(0)
+        updateScore(0)
+        updateFound([[],[],[],[]])
+        updateStock([[{ flower:"lol", number:69 }],[]])
+    };
     const handleShow = () => setWon(true);
-
-    const noWarning = () => updateWarning(false);
-    const handleWarning = () => updateWarning(true);
 
     const stockClick = () => {
         if (!gameStatus) return;
@@ -48,22 +53,21 @@ const Game = ({ leaderboard, insert, checkInsert }) => {
             updateStock(newStock)
         }
 
-        console.log(hiddenCount)
-
         forceUpdate();
     }
 
     const foundDropped = (card, target, numMoves) => {
         
         let newCards = cards;
-        let newHidden = hiddenCount;
+        let newHidden = hiddenCount+0;
+        console.log("newHidden is " + hiddenCount)
 
         if (card.col !== 20) {
             //update old column cards
             const oldCol = newCards[card.col];
             newCards[card.col] = oldCol.slice(0,oldCol.length-1)
             if (newCards[card.col].length>0 && newCards[card.col][newCards[card.col].length-1].hidden===true) {
-                newHidden--;
+                newHidden --;
                 newCards[card.col][newCards[card.col].length-1].hidden = false
             }
         }
@@ -90,9 +94,10 @@ const Game = ({ leaderboard, insert, checkInsert }) => {
 
         updateHidden(newHidden);
 
-        forceUpdate();
-
+        console.log(newHidden + " found")
         if (newHidden === 0) endGame();
+
+        forceUpdate();
     }
 
     const dropped = (card, colNum) => {
@@ -101,7 +106,7 @@ const Game = ({ leaderboard, insert, checkInsert }) => {
         let newCards = cards; 
         let oldCards = card.col>15 ? [stock[1][0]] : (card.col>6 ? [finalFound[finalFound.length-1]] : newCards[card.col]);
         let currentCards = newCards[colNum];
-        let newHidden = hiddenCount;
+        let newHidden = hiddenCount+0;
         let newScore = score;
         
         if (colNum !== card.col) {
@@ -154,9 +159,10 @@ const Game = ({ leaderboard, insert, checkInsert }) => {
 
             updateScore(newScore);
 
-            forceUpdate();
-
+            console.log(newHidden + " row")
             if (newHidden === 0) endGame();
+
+            forceUpdate();
         }
     }
 
@@ -214,6 +220,7 @@ const Game = ({ leaderboard, insert, checkInsert }) => {
                 let card = deck[counter]
                 if (row === column) card.hidden = false;
                 card.col = column
+                card.dragging = false;
                 startUpCards[column].push(card);
                 counter++;
             }
@@ -252,8 +259,11 @@ const Game = ({ leaderboard, insert, checkInsert }) => {
     }
 
     const pauseGame = () => {
-        if (gameStatus && stock[0].length !== 0) {
-            if (stock[0][0].flower !== "lol") {
+        if (gameStatus) {
+            if (stock[0].length === 0) {
+                changePause(!paused);
+                setRunning(!running);
+            } else if (stock[0][0].flower !== "lol") {
                 changePause(!paused);
                 setRunning(!running);
             }
@@ -271,7 +281,7 @@ const Game = ({ leaderboard, insert, checkInsert }) => {
     }
 
     const animateEnd = () => {
-        setTimeout(()=>setAnimate(false),1000)
+        setTimeout(()=>setAnimate(false),50)
     }
 
     return (
@@ -296,13 +306,13 @@ const Game = ({ leaderboard, insert, checkInsert }) => {
                     </div>
                 </div> 
                 <div></div>
-                <CardColumn cards={cards} colNum={0} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock} paused={paused} gameStatus={gameStatus}/>
-                <CardColumn cards={cards} colNum={1} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock} paused={paused} gameStatus={gameStatus}/>
-                <CardColumn cards={cards} colNum={2} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock} paused={paused} gameStatus={gameStatus}/>
-                <CardColumn cards={cards} colNum={3} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock} paused={paused} gameStatus={gameStatus}/>
-                <CardColumn cards={cards} colNum={4} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock} paused={paused} gameStatus={gameStatus}/>
-                <CardColumn cards={cards} colNum={5} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock} paused={paused} gameStatus={gameStatus}/>
-                <CardColumn cards={cards} colNum={6} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock} paused={paused} gameStatus={gameStatus}/>
+                <CardColumn cards={cards} colNum={0} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock} paused={paused} gameStatus={gameStatus} isAnimating={animate}/>
+                <CardColumn cards={cards} colNum={1} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock} paused={paused} gameStatus={gameStatus} isAnimating={animate}/>
+                <CardColumn cards={cards} colNum={2} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock} paused={paused} gameStatus={gameStatus} isAnimating={animate}/>
+                <CardColumn cards={cards} colNum={3} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock} paused={paused} gameStatus={gameStatus} isAnimating={animate}/>
+                <CardColumn cards={cards} colNum={4} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock} paused={paused} gameStatus={gameStatus} isAnimating={animate}/>
+                <CardColumn cards={cards} colNum={5} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock} paused={paused} gameStatus={gameStatus} isAnimating={animate}/>
+                <CardColumn cards={cards} colNum={6} dropped={dropped} accepts={accepts} foundation={foundation} stock={stock} paused={paused} gameStatus={gameStatus} isAnimating={animate}/>
                 <div></div>
                 <div className="column foundation">
                     <Target foundation={foundation} num={0} foundDropped={foundDropped} stock={stock}/>
@@ -313,8 +323,8 @@ const Game = ({ leaderboard, insert, checkInsert }) => {
             </div>
             <Menu gameStatus={gameStatus} dealCards={dealCards} pauseGame={pauseGame} paused={paused} updateCards={updateCards} running={running} 
             time={time} setTime={setTime} updateScore={updateScore} score={score}/>
-            <GameOver won={won} handleClose={handleClose} time={time} score={score} leaderboard={leaderboard} insert={insert} isTop={isTop}/>
-            <Warning warning={warning} handleClose={noWarning} />
+            <GameOver won={won} handleClose={handleClose} time={time} score={score} insert={insert} 
+            isTop={isTop} insertDaily={insertDaily}/>
         </div>
     )
 

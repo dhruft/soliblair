@@ -7,7 +7,7 @@ const Target = ({ foundation, num, foundDropped, stock, moves }) => {
     const flowers = ["heart","diamond","clover","spade"];
     const currentFound = foundation[num];
     
-    const [, dragRef] = useDrop(() => ({
+    const [{isOver,canDrop}, dragRef] = useDrop(() => ({
         drop: (card) => {
             const tempCard = card.col===20 ? stock[1][0] : card
             foundDropped(tempCard, num, moves);
@@ -30,12 +30,14 @@ const Target = ({ foundation, num, foundDropped, stock, moves }) => {
     }), [currentFound, num, stock, moves]);
 
     return (
-        <div ref={dragRef} className="empty">
-            {currentFound.length > 0 ? 
-            <Card foundCard=" foundCard" flower={currentFound[currentFound.length-1].flower} number={currentFound[currentFound.length-1].number} col={7+num} hidden={false}/> :
-            ""}
+        <div ref={dragRef} className={"empty "+flowers[num].charAt(0)+(isOver&&canDrop ? " show" : "")}>
+                {currentFound.length > 0 ? 
+                <Card foundCard=" foundCard" flower={currentFound[currentFound.length-1].flower} number={currentFound[currentFound.length-1].number} col={7+num} hidden={false}/>
+                 : ""}
         </div>
     )
 }
+
+//<img src={require("../cardPics/"+flowers[num].charAt(0)+"F.png")} alt={flowers[num].charAt(0)+"F"} className="empty"/>}
 
 export default Target

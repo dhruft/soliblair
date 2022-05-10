@@ -3,7 +3,7 @@
 
 .menu {
     width: 30%;
-    margin: 20px;
+    margin-right: 1.5vw;
     margin-left: 0px;
     margin-top: 0px;
 }
@@ -12,7 +12,8 @@
     height: 15vh;
     background-color: #e64747;
     border-radius: 4vh;
-    font-size: 5vh;
+
+    font-size: 2em;
 
     color: white;
     display: flex;
@@ -53,7 +54,7 @@
 }
 
 .footer {
-    font-size: 3vh;
+    font-size: 1.5em;
     margin-top: 2vh;
 }
 
@@ -76,7 +77,7 @@
     border-top-left-radius: 2vh;
     border-top-right-radius: 2vh;
     height: 30%;
-    font-size: 2vh;
+    font-size: 1em;
     font-weight: bold;
 
     display: flex;
@@ -86,7 +87,7 @@
 
 .content {
     height: 71%;
-    font-size: 7vh;
+    font-size: 3em;
     border: solid black;
     border-bottom-left-radius: 2vh;
     border-bottom-right-radius: 2vh;

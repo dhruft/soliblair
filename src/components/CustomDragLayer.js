@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useDragLayer } from 'react-dnd'
 import '../styles/card.scss'
 

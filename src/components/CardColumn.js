@@ -1,8 +1,9 @@
 import Card from './Card';
 import '../styles/cardcol.scss';
 import { useDrop } from 'react-dnd';
+import { useState } from 'react';
 
-const CardColumn = ({ cards, colNum, dropped, accepts, foundation, stock, paused, gameStatus }) => {
+const CardColumn = ({ cards, colNum, dropped, accepts, foundation, stock, paused, gameStatus, isAnimating }) => {
 
     const currentCards = cards[colNum];
 
@@ -28,14 +29,19 @@ const CardColumn = ({ cards, colNum, dropped, accepts, foundation, stock, paused
             canDrop: !!monitor.canDrop()
       }),
     }), [dropped, colNum, accepts, foundation, stock]);
+
+    const processDrag = (pos) => {
+      
+    }
   
     return (
-      <div ref={dragRef} className="rowStack">
+      <div ref={dragRef} className="rowStack" style={{position: isAnimating ? 'relative' : ''}}>
           {Array.from(Array(currentCards.length).keys()).map((card) => (
             <div>
 
-              <Card gameStatus={gameStatus} paused={paused} isFirst={"c" + card.toString()} flower={currentCards[card].flower} hidden={currentCards[card].hidden} 
-              number={currentCards[card].number} col={currentCards[card].col} key={currentCards[card].flower.charAt(0) + currentCards[card].number.toString()}/>
+              <Card gameStatus={gameStatus} paused={paused} pos={card} flower={currentCards[card].flower} hidden={currentCards[card].hidden} 
+              number={currentCards[card].number} col={currentCards[card].col} key={currentCards[card].flower.charAt(0) + currentCards[card].number.toString()}
+              dragging={currentCards[card].dragging}/>
 
             </div>
           ))}

@@ -1,7 +1,15 @@
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import '../styles/navbar.scss';
+import { useState } from 'react'
+
+import Warning from './Warning'
 
 const NavFull = () => {
+  const [warning, updateWarning] = useState(false);
+
+  const noWarning = () => updateWarning(false);
+  const handleWarning = () => updateWarning(true);
+
   return (
     <Navbar variant="dark" className="navbar">
       <Container>
@@ -12,6 +20,7 @@ const NavFull = () => {
           <Nav.Link href="/soliblair/info">Info</Nav.Link>
         </Nav>
       </Container>
+      <Warning warning={warning} handleClose={noWarning} />
     </Navbar>
   )
 }

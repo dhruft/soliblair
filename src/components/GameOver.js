@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { InputGroup, Button, Form } from 'react-bootstrap';
 import '../styles/gameOver.scss';
 
-const GameOver = ({ won, handleClose, score, time, isTop, insert }) => {
+const GameOver = ({ won, handleClose, score, time, isTop, insert, insertDaily }) => {
 
     const [isError, updateError] = useState(false);
 
@@ -17,7 +17,10 @@ const GameOver = ({ won, handleClose, score, time, isTop, insert }) => {
           updateError(true);
         } else {
           event.stopPropagation();
-          insert(name, score)
+          insertDaily(name, score)
+          if (isTop[0]) {
+            insert(name,score)
+          }
           handleClose();
         }
     }
@@ -46,9 +49,9 @@ const GameOver = ({ won, handleClose, score, time, isTop, insert }) => {
             </div>
 
              
-            {isTop && <div>
+            {(isTop[0]||isTop[1]) && <div>
                 <hr />
-                <h4 className="formHeader">You made the Leaderboard!</h4>
+                <h4 className="formHeader">{`You made the Daily ${isTop[0]?"and All-Time ":""}Leaderboard!`}</h4>
                 <br />
 
                 <Form onSubmit={handleSubmit}>

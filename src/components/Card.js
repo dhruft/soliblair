@@ -2,11 +2,11 @@ import '../styles/card.scss';
 import { useDrag } from 'react-dnd';
 
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-import Draggable from './CustomDragLayer'
+import CustomDragLayer from './CustomDragLayer'
 
-const Card = ({ flower, number, hidden, col, foundCard, draggable, isFirst, paused, gameStatus, animator }) => {
+const Card = ({ flower, number, hidden, col, foundCard, draggable, pos, paused, gameStatus, animator, dragging }) => {
 
     const [{isDragging}, drag, dragPreview] = useDrag(() => ({
       type: (hidden ? 'hidden' : 'card'),
@@ -22,14 +22,14 @@ const Card = ({ flower, number, hidden, col, foundCard, draggable, isFirst, paus
     }, []);
 
     const image = <img ref={drag} src={require("../cardPics/"+(hidden?"closed":(flower.charAt(0)+number))+".png")} alt={(hidden?"closed":(flower.charAt(0)+number))} 
-    className={"cardBody "+foundCard+" "+animator+" "+(hidden?"hidden ":"notHidden ")+isFirst} 
+    className={"cardBody "+foundCard+" "+animator+" "+(hidden?"hidden ":"notHidden ")} 
     style={{ visibility: isDragging ? 'hidden' : 'inherit'}}/>
   
     return (
-      <>
+      <div>
         {image}
-        <Draggable ref={drag} flower={flower} hidden={hidden} number={number} key={flower}/>
-      </>
+        {isDragging && <CustomDragLayer flower={flower} hidden={hidden} number={number} key={flower}/>}
+      </div>
     );
   };
 

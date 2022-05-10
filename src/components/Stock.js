@@ -24,7 +24,7 @@ const Stock = ({ stock, stockClick, running }) => {
         <div className="deck" onClick={handleClick}>
             <div className="mainDeck">
                 {(stock[0].length !== 0 ? <Card flower={stock[0][0].flower} number={stock[0][0].number} col={20} hidden={true} draggable={false}/> :
-                <div className="empty s"/>)}
+                <div className="empty F"/>)}
             </div>
 
             {animate && (

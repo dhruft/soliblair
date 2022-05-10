@@ -13,9 +13,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <DndProvider backend={HTML5Backend}>
       <React.StrictMode>
-        <HashRouter>
           <App />
-        </HashRouter>
       </React.StrictMode>
   </DndProvider>
 );
