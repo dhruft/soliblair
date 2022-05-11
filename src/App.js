@@ -6,14 +6,18 @@ import Info from './Info'
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 
 import db from './firebase.js';
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import { collection, addDoc, getDocs, deleteDoc } from "firebase/firestore";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function App() {
 
   const [leaderboard, changeLb] = useState([]);
   const [dailyLb, changeDailyLb] = useState([]);
+
+  useEffect(() => {
+    startResets();
+  },[])
 
   const checkInsert = async (score) => {
     let newLb = await updateLeaderboard();
@@ -88,6 +92,32 @@ function App() {
     const newLb = lb.slice(0,10)
     changeDailyLb(newLb)
     return newLb
+  }
+
+  const startResets = async () => {
+    console.log("starting")
+    var today = new Date();
+    var midnight = new Date();
+  
+    midnight.setDate( today.getDate() + 1 )
+    midnight.setHours( 9 )
+    midnight.setMinutes( 0 )
+    midnight.setSeconds( 40 )
+    midnight.setMilliseconds( 0 )
+    console.log((midnight.getTime() - today.getTime())%86400000)
+  
+    setTimeout(() => {
+      console.log("resetting")  
+
+      db.collection("daily").get().then(
+        (snap) => snap.forEach(async (doc) => {
+          console.log(doc)
+          await deleteDoc(doc.ref.delete());
+        })
+      )
+  
+      startResets()
+    }, (midnight.getTime() - today.getTime())%86400000)
   }
 
   return (

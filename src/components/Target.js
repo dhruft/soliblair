@@ -2,15 +2,14 @@ import '../styles/target.scss'
 import Card from './Card.js'
 import { useDrop } from 'react-dnd';
 
-const Target = ({ foundation, num, foundDropped, stock, moves }) => {
+const Target = ({ foundation, num, foundDropped, stock, moves, hiddenCount }) => {
 
-    const flowers = ["heart","diamond","clover","spade"];
+    const flowers = ["heart","diamond","spade","clover"];
     const currentFound = foundation[num];
     
     const [{isOver,canDrop}, dragRef] = useDrop(() => ({
         drop: (card) => {
-            const tempCard = card.col===20 ? stock[1][0] : card
-            foundDropped(tempCard, num, moves);
+            foundDropped(card.col===20 ? stock[1][0] : card, num, hiddenCount);
         },
         canDrop: (item) => {
 
@@ -27,7 +26,7 @@ const Target = ({ foundation, num, foundDropped, stock, moves }) => {
             isOver: !!monitor.isOver(),
             canDrop: !!monitor.canDrop()
       }),
-    }), [currentFound, num, stock, moves]);
+    }), [currentFound, num, stock, moves, hiddenCount]);
 
     return (
         <div ref={dragRef} className={"empty "+flowers[num].charAt(0)+(isOver&&canDrop ? " show" : "")}>

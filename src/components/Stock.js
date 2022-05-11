@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { motion } from "framer-motion"
 
-const Stock = ({ stock, stockClick, running }) => {
+const Stock = ({ stock, stockClick, running, paused, gameStatus }) => {
 
     const [animate, setAnimate] = useState(false);
 
@@ -44,7 +44,7 @@ const Stock = ({ stock, stockClick, running }) => {
             {stock[1].slice(1,Math.min(3,stock[1].length)).reverse().map((card) =>
                 <Card flower={card.flower} number={card.number} col={20} draggable={false} key={card.flower.charAt(0) + card.number.toString()}/> 
             )}
-            {stock[1].length>0 ? <Card flower={stock[1][0].flower} number={stock[1][0].number} col={20}/> : ""}
+            {stock[1].length>0 ? <Card paused={paused} gameStatus={gameStatus} flower={stock[1][0].flower} number={stock[1][0].number} col={20}/> : ""}
         </div> 
     </div>
   )
