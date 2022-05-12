@@ -6,14 +6,20 @@ import Info from './Info'
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 
 import db from './firebase.js';
-import { collection, addDoc, getDocs, deleteDoc } from "firebase/firestore";
+import { getDocs, addDoc, query, orderBy, limit, collection } from 'firebase/firestore'
+import {  } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js'
 
 import { useState, useEffect } from 'react';
+
+const scoresRef = collection(db, "scores");
+const dailyRef = collection(db, "daily");
 
 function App() {
 
   const [leaderboard, changeLb] = useState([]);
   const [dailyLb, changeDailyLb] = useState([]);
+  const [lowest, changeLowest] = useState();
+  const [lowestDaily, changeDailyLowest] = useState();
 
   useEffect(() => {
     startResets();
@@ -22,76 +28,42 @@ function App() {
   const checkInsert = async (score) => {
     let newLb = await updateLeaderboard();
     let newDailyLb = await updateDaily();
-    return [newLb.length >= 10 ? score > newLb[9].score : true, newDailyLb.length >= 10 ? score > newDailyLb[9].score : true];
+    return [newLb.length >= 10 ? (score > newLb[9].score) : true, newDailyLb.length >= 10 ? score > newDailyLb[9].score : true];
   }
 
   const insert = async (name, score) => {
 
-      let newLb = leaderboard;
-      newLb.push({
-        name,
-        score
-      });
-      changeLb(newLb);
-      
-      try {
-          await addDoc(collection(db, "scores"), {content: [name, score]});
-      } catch (e) {
-          console.error("Error adding document: ", e);
-      }
+      if(score >= lowest) {await addDoc(scoresRef, { name: name, score: score })};
+      await addDoc(dailyRef, { name: name, score: score });
   }
 
   const insertDaily = async (name, score) => {
-    let newLb = dailyLb;
-    newLb.push({
-      name,
-      score
-    });
-    changeDailyLb(newLb)
-
-    try {
-      await addDoc(collection(db, "daily"), {content: [name, score]});
-  } catch (e) {
-      console.error("Error adding document: ", e);
-  }
+    if(score >= lowestDaily) {await addDoc(scoresRef, { name: name, score: score })};
+    await addDoc(dailyRef, { name: name, score: score });
   }
 
   const updateLeaderboard = async () => {
-    let lb = [];
-
-    const querySnapshot = await getDocs(collection(db, "scores"));
-    querySnapshot.forEach((doc) => {
-      const content = doc.data().content;
-      lb.push({
-        name: content[0],
-        score: content[1]
-      })
-    });
-
-    lb.sort((val1, val2) => val2.score - val1.score);
-
-    const newLb = lb.slice(0,10)
-    changeLb(newLb)
-    return newLb
+    const rawdataq = query(scoresRef, orderBy("score"), limit(10));
+    const rawdata = await getDocs(rawdataq);
+    var allData = rawdata.docs.map((doc) => ({ name: doc.data().name, score: doc.data().score }));
+    allData.sort((a, b) => b.score - a.score);
+    allData = allData.slice(0, 10);
+    changeLowest(allData.length > 0 ? allData[allData.length - 1].score : 0)
+    
+    changeLb(allData)
+    return allData
   }
 
   const updateDaily = async () => {
-    let lb = [];
+    const rawdataq = query(dailyRef, orderBy("score"), limit(10));
+    const rawdata = await getDocs(rawdataq);
+    var allData = rawdata.docs.map((doc) => ({ name: doc.data().name, score: doc.data().score }));
+    allData.sort((a, b) => b.score - a.score);
+    allData = allData.slice(0, 10);
+    changeDailyLowest(allData.length > 0 ? allData[allData.length - 1].score : 0)
 
-    const querySnapshot = await getDocs(collection(db, "daily"));
-    querySnapshot.forEach((doc) => {
-      const content = doc.data().content;
-      lb.push({
-        name: content[0],
-        score: content[1]
-      })
-    });
-
-    lb.sort((val1, val2) => val2.score - val1.score);
-
-    const newLb = lb.slice(0,10)
-    changeDailyLb(newLb)
-    return newLb
+    changeDailyLb(allData)
+    return allData
   }
 
   const startResets = async () => {
@@ -108,13 +80,13 @@ function App() {
   
     setTimeout(() => {
       console.log("resetting")  
-
+/*
       db.collection("daily").get().then(
         (snap) => snap.forEach(async (doc) => {
           console.log(doc)
           await deleteDoc(doc.ref.delete());
         })
-      )
+      )*/
   
       startResets()
     }, (midnight.getTime() - today.getTime())%86400000)

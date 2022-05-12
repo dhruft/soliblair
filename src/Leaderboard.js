@@ -10,15 +10,13 @@ const Leaderboard = ({ updateLeaderboard, updateDaily, leaderboard, dailyLb }) =
 
     useEffect(() => {
 
-        const fetchDaily = async () => {
+        const fetchData = async () => {
             if (dailyLb.length===0) {
                 updateDaily().then((data) => changedRLB(data)).then(()=>console.log('data fetched'));
             } else {
                 changedRLB(dailyLb)
             }
-        }
-
-        const fetchData = async () => {
+            
             if (leaderboard.length === 0) {
                 updateLeaderboard().then((data) => changeRLB(data)).then(()=>console.log('data fetched'));
             } else {
@@ -26,7 +24,7 @@ const Leaderboard = ({ updateLeaderboard, updateDaily, leaderboard, dailyLb }) =
             } 
         }
 
-        fetchData().catch(console.error).then(()=>fetchDaily()).catch(console.error).then(()=>updateLoading(false));
+        fetchData().catch(console.error).then(()=>updateLoading(false))
 
     }, []);
 

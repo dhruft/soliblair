@@ -4,7 +4,7 @@ import { useDrop } from 'react-dnd';
 
 const Target = ({ foundation, num, foundDropped, stock, moves, hiddenCount }) => {
 
-    const flowers = ["heart","diamond","spade","clover"];
+    const flowers = ["heart","diamond","clover","spade"];
     const currentFound = foundation[num];
     
     const [{isOver,canDrop}, dragRef] = useDrop(() => ({
