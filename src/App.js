@@ -6,8 +6,7 @@ import Info from './Info'
 import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 
 import db from './firebase.js';
-import { getDocs, addDoc, query, orderBy, limit, collection } from 'firebase/firestore'
-import {  } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js'
+import { getDocs, addDoc, query, orderBy, limit, collection, deleteDoc, doc } from 'firebase/firestore'
 
 import { useState, useEffect } from 'react';
 
@@ -32,14 +31,11 @@ function App() {
   }
 
   const insert = async (name, score) => {
-
-      if(score >= lowest) {await addDoc(scoresRef, { name: name, score: score })};
-      await addDoc(dailyRef, { name: name, score: score });
+      await addDoc(scoresRef, { name: name, score: score });
   }
 
   const insertDaily = async (name, score) => {
-    if(score >= lowestDaily) {await addDoc(scoresRef, { name: name, score: score })};
-    await addDoc(dailyRef, { name: name, score: score });
+      await addDoc(dailyRef, { name: name, score: score });
   }
 
   const updateLeaderboard = async () => {
@@ -67,26 +63,23 @@ function App() {
   }
 
   const startResets = async () => {
-    console.log("starting")
     var today = new Date();
     var midnight = new Date();
   
     midnight.setDate( today.getDate() + 1 )
-    midnight.setHours( 9 )
+    midnight.setHours( 0 )
     midnight.setMinutes( 0 )
-    midnight.setSeconds( 40 )
+    midnight.setSeconds( 0 )
     midnight.setMilliseconds( 0 )
-    console.log((midnight.getTime() - today.getTime())%86400000)
   
     setTimeout(() => {
       console.log("resetting")  
-/*
-      db.collection("daily").get().then(
-        (snap) => snap.forEach(async (doc) => {
-          console.log(doc)
-          await deleteDoc(doc.ref.delete());
+
+      getDocs(dailyRef).then((docs)=>{
+        docs.docs.forEach((docObj) => {
+          deleteDoc(doc(db, "daily", docObj.id))
         })
-      )*/
+      })
   
       startResets()
     }, (midnight.getTime() - today.getTime())%86400000)

@@ -59,6 +59,8 @@ const Game = ({ insert, insertDaily, checkInsert }) => {
             updateStock(newStock)
         }
 
+        endGame();
+
         forceUpdate();
     }
 
