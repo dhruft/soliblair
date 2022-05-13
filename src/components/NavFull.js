@@ -1,27 +1,43 @@
-import { Navbar, Container, Nav } from 'react-bootstrap';
 import '../styles/navbar.scss';
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import Warning from './Warning'
+import { isCursorAtEnd } from '@testing-library/user-event/dist/utils';
 
 const NavFull = () => {
   const [warning, updateWarning] = useState(false);
+  const [link, changeLink] = useState('')
 
-  const noWarning = () => updateWarning(false);
-  const handleWarning = () => updateWarning(true);
+  const navigate = useNavigate();
+  const handleClose = (num, newLink) => {
+    updateWarning(false)
+    if (num) navigate("/" + newLink)
+  }
+
+  const handleNav = (newLink) => {
+    const curr = window.location.pathname;
+    
+    if (newLink.length===0 && curr==="/soliblair/") {
+      console.log("skipped")
+    } else if (curr==="/soliblair/") {
+      changeLink(newLink)
+      updateWarning(true)
+    } else {
+      navigate("/" + newLink)
+    }
+  }
 
   return (
-    <Navbar variant="dark" className="navbar">
-      <Container>
-        <Navbar.Brand href="/soliblair">Soli-Blair</Navbar.Brand>
-        <Nav>
-          <Nav.Link href="/soliblair">Play</Nav.Link>
-          <Nav.Link href="/soliblair/leaderboard">Leaderboard</Nav.Link>
-          <Nav.Link href="/soliblair/info">Info</Nav.Link>
-        </Nav>
-      </Container>
-      <Warning warning={warning} handleClose={noWarning} />
-    </Navbar>
+    <div className="fullnav">
+        <div className="brand" onClick={()=>handleNav('')}>Soli-Blair</div>
+        <div className="navCont">
+          <div className="direct" onClick={()=>handleNav('')}>Play</div>
+          <div className="direct" onClick={()=>handleNav('leaderboard')}>Leaderboard</div>
+          <div className="direct" onClick={()=>handleNav('info')}>Info</div>
+        </div>
+      <Warning warning={warning} handleClose={handleClose} link={link}/>
+    </div>
   )
 }
 

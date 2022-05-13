@@ -3,28 +3,33 @@ import { Modal } from 'react-bootstrap'
 import { Button } from 'react-bootstrap';
 import '../styles/gameOver.scss';
 
-const Warning = ({ handleClose, warning}) => {
+const Warning = ({ handleClose, warning, link }) => {
     return (
     <div>
       <Modal
         show={warning}
-        onHide={() => handleClose(0)}
+        onHide={() => handleClose(0, link)}
         backdrop="static"
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>You Won!</Modal.Title>
+          <Modal.Title>WARNING</Modal.Title>
         </Modal.Header>
         <Modal.Body>
              
             <div>
-                <hr />
-                <h4 className="formHeader">You made the Leaderboard!</h4>
+                <h4 className="formHeader">Are you sure you want to navigate away? All game progress will be lost.</h4>
                 <br />
-                    
-                <Button onClick={() => handleClose(1)} className="modalSubmit" variant="primary" type="submit" size="lg" style={{width:"100%"}}>
-                    Submit
-                </Button>
+                
+                <div className="btns">
+                  <Button onClick={() => handleClose(1, link)} className="yes" variant="primary" type="submit" size="lg" style={{width:"100%"}}>
+                      Yes!
+                  </Button>
+                  <Button onClick={() => handleClose(0, link)} className="modalSubmit" variant="primary" type="submit" size="lg" style={{width:"100%"}}>
+                      No.
+                  </Button>
+                </div>
+                
             </div>
 
         </Modal.Body>

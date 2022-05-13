@@ -31,11 +31,11 @@ function App() {
   }
 
   const insert = async (name, score) => {
-      await addDoc(scoresRef, { name: name, score: score });
+      addDoc(scoresRef, { name: name, score: score });
   }
 
   const insertDaily = async (name, score) => {
-      await addDoc(dailyRef, { name: name, score: score });
+      addDoc(dailyRef, { name: name, score: score });
   }
 
   const updateLeaderboard = async () => {
@@ -87,13 +87,14 @@ function App() {
 
   return (
     <div className="App">
-      <Nav />
-      <Router>
+      <Router basename='/soliblair'>
+        <Nav />
         <Routes>
-          <Route path="/soliblair/leaderboard" element={<Leaderboard updateLeaderboard={updateLeaderboard} updateDaily={updateDaily}
+          <Route path="/leaderboard" element={<Leaderboard updateLeaderboard={updateLeaderboard} updateDaily={updateDaily}
           leaderboard={leaderboard} dailyLb={dailyLb}/>} />
-          <Route path="/soliblair/info" element={<Info />}/>
-          <Route exact path="/soliblair" element={<Game insert={insert} insertDaily={insertDaily} checkInsert={checkInsert}/>} />
+          <Route path="/info" element={<Info />}/>
+
+          <Route exact path="/" element={<Game insert={insert} insertDaily={insertDaily} checkInsert={checkInsert}/>} />
         </Routes>
       </Router>
     </div>

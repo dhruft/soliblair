@@ -21,3 +21,16 @@
     justify-content: center;
     text-align: center;
 }
+
+.btns {
+    display: flex;
+    flex-direction: row;
+    gap: 1vw;
+}
+
+.yes {
+    background-color: rgb(75, 187, 75) !important;
+    border: none !important;
+    
+    @include yesButton;
+}
