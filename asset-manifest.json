@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/soliblair/static/css/main.8adf3368.css",
-    "main.js": "/soliblair/static/js/main.9de77644.js",
+    "main.js": "/soliblair/static/js/main.6e1bf5b0.js",
     "static/media/F.png": "/soliblair/static/media/F.bc9d4ccb77b3ab4af464.png",
     "static/media/cF.png": "/soliblair/static/media/cF.37dd9c5dfaa2b253e4cf.png",
     "static/media/hF.png": "/soliblair/static/media/hF.578d75ee71ae8e745d1a.png",
@@ -62,10 +62,10 @@
     "static/media/d10.png": "/soliblair/static/media/d10.3f09f50fbe3888523c2d.png",
     "index.html": "/soliblair/index.html",
     "main.8adf3368.css.map": "/soliblair/static/css/main.8adf3368.css.map",
-    "main.9de77644.js.map": "/soliblair/static/js/main.9de77644.js.map"
+    "main.6e1bf5b0.js.map": "/soliblair/static/js/main.6e1bf5b0.js.map"
   },
   "entrypoints": [
     "static/css/main.8adf3368.css",
-    "static/js/main.9de77644.js"
+    "static/js/main.6e1bf5b0.js"
   ]
 }
