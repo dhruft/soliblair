@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import Warning from './Warning'
-import { isCursorAtEnd } from '@testing-library/user-event/dist/utils';
 
 const NavFull = () => {
   const [warning, updateWarning] = useState(false);

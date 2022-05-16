@@ -1,7 +1,6 @@
 import Card from './Card';
 import '../styles/cardcol.scss';
 import { useDrop } from 'react-dnd';
-import { useState } from 'react';
 
 const CardColumn = ({ cards, colNum, dropped, accepts, foundation, stock, paused, gameStatus, isAnimating }) => {
 

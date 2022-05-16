@@ -1,7 +1,12 @@
+import './styles/info.scss'
+
 const Info = () => {
   return (
     <div>
-      <h1>How is the score calculated?</h1>
+      <div className="gameMechs">
+        <h1>How is the score calculated?</h1>
+      </div>
+      
       
     </div>
   )

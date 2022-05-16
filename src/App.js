@@ -27,19 +27,22 @@ function App() {
   const checkInsert = async (score) => {
     let newLb = await updateLeaderboard();
     let newDailyLb = await updateDaily();
+    console.log([newLb.length >= 10 ? (score > newLb[9].score) : true, newDailyLb.length >= 10 ? score > newDailyLb[9].score : true])
     return [newLb.length >= 10 ? (score > newLb[9].score) : true, newDailyLb.length >= 10 ? score > newDailyLb[9].score : true];
   }
 
   const insert = async (name, score) => {
+      console.log("inserting all-time")
       addDoc(scoresRef, { name: name, score: score });
   }
 
   const insertDaily = async (name, score) => {
+    console.log("inserting daily")
       addDoc(dailyRef, { name: name, score: score });
   }
 
   const updateLeaderboard = async () => {
-    const rawdataq = query(scoresRef, orderBy("score"), limit(10));
+    const rawdataq = query(scoresRef, orderBy("score", "desc"), limit(10));
     const rawdata = await getDocs(rawdataq);
     var allData = rawdata.docs.map((doc) => ({ name: doc.data().name, score: doc.data().score }));
     allData.sort((a, b) => b.score - a.score);
@@ -51,7 +54,7 @@ function App() {
   }
 
   const updateDaily = async () => {
-    const rawdataq = query(dailyRef, orderBy("score"), limit(10));
+    const rawdataq = query(dailyRef, orderBy("score", "desc"), limit(10));
     const rawdata = await getDocs(rawdataq);
     var allData = rawdata.docs.map((doc) => ({ name: doc.data().name, score: doc.data().score }));
     allData.sort((a, b) => b.score - a.score);

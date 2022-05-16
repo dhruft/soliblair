@@ -5,7 +5,11 @@
     margin-left: 1.5vw;
     margin-right: 1.5vw;
 
-    background-color: #50c878; //or this #58cc6d
+    //background-color: #50c878; //or this #58cc6d
+
+    background-image: url("../cardPics/F.png");
+    background-size: 71vw;
+
     border-radius: 3vw;
     height: 81vh;
     width: 95vw;
@@ -16,8 +20,10 @@
     flex-direction: row;
     gap: 1.7vw;
 
-    padding-left: 2vw;
+    padding-left: 0;
     padding-right: 2vw;
+
+    position: relative;
 }
 
 .wrapper {
@@ -49,4 +55,29 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+
+.isPaused {
+    background-image: url("../cardPics/F.png");
+    background-size: 71vw;
+
+    height: 77vh;
+    width: 71vw;
+
+    border-radius: 2vw;
+
+    position: absolute;
+    text-align: center;
+}
+
+.pauseText {
+    position: relative;
+    bottom: 2vh;
+
+    color: #e64747;
+    line-height: 77vh;
+
+    font-size: 20vh;
+    font-family: "Brush Script MT";
 }

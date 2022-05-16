@@ -29,41 +29,46 @@ const Leaderboard = ({ updateLeaderboard, updateDaily, leaderboard, dailyLb }) =
     }, []);
 
     return (
+    <div>
+        
+        <div className="headers">
+            <h2 className="title">All-Time Leaderboard</h2>
+            <h2 className="title">Daily Leaderboard</h2>
+        </div>
         <div className="lbcontainer">
             <Table striped bordered hover className="table">
-            <thead>
-                <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Score</th>
-                </tr>
-            </thead>
-            <tbody>
-                {!loading && [0,1,2,3,4,5,6,7,8,9].map((num) => {
-                    if (RLB.length > num) {
-                        return (
-                            <tr>
-                            <td>{num+1}</td>
-                            <td>{RLB[num].name}</td>
-                            <td>{RLB[num].score}</td>
-                            </tr>
-                        )
-                    } else {
-                        return (
-                            <tr>
-                            <td>{num+1}</td>
-                            <td>N/A</td>
-                            <td>0</td>
-                            </tr>
-                        )
-                    }
-                    
-                })}
-            </tbody>
+                <thead className="header">
+                    <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {!loading && [0,1,2,3,4,5,6,7,8,9].map((num) => {
+                        if (RLB.length > num) {
+                            return (
+                                <tr>
+                                <td>{num+1}</td>
+                                <td>{RLB[num].name}</td>
+                                <td>{RLB[num].score}</td>
+                                </tr>
+                            )
+                        } else {
+                            return (
+                                <tr>
+                                <td>{num+1}</td>
+                                <td>N/A</td>
+                                <td>0</td>
+                                </tr>
+                            )
+                        }
+                        
+                    })}
+                </tbody>
             </Table>
-
             <Table striped bordered hover className="table">
-            <thead>
+            <thead className="header">
                 <tr>
                 <th>#</th>
                 <th>Name</th>
@@ -93,6 +98,8 @@ const Leaderboard = ({ updateLeaderboard, updateDaily, leaderboard, dailyLb }) =
                 })}
             </tbody>
             </Table>
+        </div>
+
         </div>
     )
 }

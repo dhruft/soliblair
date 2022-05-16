@@ -48,6 +48,8 @@ const Game = ({ insert, insertDaily, checkInsert }) => {
     const stockClick = () => {
         if (!gameStatus) return;
         if (stock[0].length===0) {
+            updateScore(score-50)
+
             let newStock = stock;
             newStock[0] = newStock[1];
             newStock[1] = [];
@@ -126,7 +128,6 @@ const Game = ({ insert, insertDaily, checkInsert }) => {
             const newObj1 = calculateObject(colNum, newCards)
             let newObj2 = "";
             if (card.col>6 && card.col<15) {
-                newScore -= 15;
                 let newFoundation = foundation;
                 newFoundation[card.col-7] = newFoundation[card.col-7].slice(0,newFoundation[card.col-7].length-1);
                 updateFound(newFoundation)
@@ -280,6 +281,7 @@ const Game = ({ insert, insertDaily, checkInsert }) => {
     return (
         <div className="wrapper">
             <div className="gameContainer shadow-lg">
+                <div className={paused ? "isPaused" : "notPaused"}> <h1 className="pauseText">{paused ? "Paused" : ""}</h1> </div>
                 <div className="column stock">
                     <Stock stock={stock} stockClick={stockClick} running={running} paused={paused} gameStatus={gameStatus}/>
                     <div className="animateRow">
