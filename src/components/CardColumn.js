@@ -40,7 +40,7 @@ const CardColumn = ({ cards, colNum, dropped, accepts, foundation, stock, paused
 
               <Card gameStatus={gameStatus} paused={paused} pos={card} flower={currentCards[card].flower} hidden={currentCards[card].hidden} 
               number={currentCards[card].number} col={currentCards[card].col} key={currentCards[card].flower.charAt(0) + currentCards[card].number.toString()}
-              dragging={currentCards[card].dragging}/>
+              dragging={currentCards[card].dragging} cards={cards}/>
 
             </div>
           ))}

@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 
 import CustomDragLayer from './CustomDragLayer'
 
-const Card = ({ flower, number, hidden, col, foundCard, draggable, pos, paused, gameStatus, animator, dragging }) => {
+const Card = ({ flower, number, hidden, col, foundCard, draggable, pos, paused, gameStatus, animator, cards }) => {
 
     const [{isDragging}, drag, dragPreview] = useDrag(() => ({
       type: (hidden ? 'hidden' : 'card'),
@@ -28,7 +28,7 @@ const Card = ({ flower, number, hidden, col, foundCard, draggable, pos, paused, 
     return (
       <div>
         {image}
-        {isDragging && <CustomDragLayer flower={flower} hidden={hidden} number={number} key={flower}/>}
+        {isDragging && <CustomDragLayer flower={flower} hidden={hidden} number={number} key={flower} pos={pos} cards={cards[col]}/>}
       </div>
     );
   };

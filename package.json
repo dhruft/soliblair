@@ -2,7 +2,7 @@
   "name": "soliblair",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://dhruvaa1.github.io/soliblair",
+  "homepage": "https://dhruft.github.io/soliblair",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.1.1",

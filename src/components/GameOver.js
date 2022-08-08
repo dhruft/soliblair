@@ -13,7 +13,7 @@ const GameOver = ({ won, handleClose, score, time, isTop, insert, insertDaily })
     
         const name = event.target[0].value;
     
-        if (name.length < 1) {
+        if (name.length < 1 || name.length > 25) {
           updateError(true);
         } else {
           event.stopPropagation();
@@ -63,7 +63,7 @@ const GameOver = ({ won, handleClose, score, time, isTop, insert, insertDaily })
                             placeholder="Enter Name"
                             isInvalid={ isError } />
                             <Form.Control.Feedback type='invalid'>
-                                Please enter a name!
+                                Name must be between 1 and 25 characters!
                             </Form.Control.Feedback>
                         </InputGroup>
                     </Form.Group>
